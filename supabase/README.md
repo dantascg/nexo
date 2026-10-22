@@ -22,3 +22,9 @@ e as políticas RLS do próprio Postgres.
 Depois de criar pelo menos uma conta, execute `seed.sql` no SQL Editor. A seed
 cria uma comunidade, três posts e três eventos usando essa conta. Ela pode ser
 executada novamente sem duplicar os registros.
+
+## Realtime do feed
+
+Depois de aplicar a migration inicial, execute também
+`migrations/20261022130000_enable_realtime_posts.sql` no SQL Editor. Ela habilita
+eventos de novos posts para o feed aberto em outras sessões.

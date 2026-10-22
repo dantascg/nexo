@@ -1,9 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 import { useUser } from "../../components/UserProvider";
 import type { HomeEvent, HomePost } from "../../../lib/home";
+import { createClient } from "../../../lib/supabase/client";
 import { publishPost, type PublishState } from "./actions";
 import styles from "../../styles/dashboard.module.css";
 
@@ -27,7 +29,24 @@ function PublishButton() {
 
 export default function InicioView({ posts, events }: { posts: HomePost[]; events: HomeEvent[] }) {
   const user = useUser();
+  const router = useRouter();
   const [state, action] = useActionState<PublishState, FormData>(publishPost, null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel("home-posts")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "posts" },
+        () => router.refresh()
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [router]);
 
   return <div className={styles.page}>
     <main>
