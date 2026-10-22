@@ -9,6 +9,7 @@ export type HomePost = {
   authorInitials: string;
   likeCount: number;
   commentCount: number;
+  isSaved: boolean;
 };
 
 export type HomeEvent = {
@@ -29,8 +30,9 @@ function displayName(value: unknown) {
 
 export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEvent[] }> {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const [{ data: postRows, error: postsError }, { data: eventRows, error: eventsError }] =
+  const [{ data: postRows, error: postsError }, { data: eventRows, error: eventsError }, { data: savedRows }] =
     await Promise.all([
       supabase
         .from("posts")
@@ -43,6 +45,7 @@ export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEv
         .gte("starts_at", new Date().toISOString())
         .order("starts_at", { ascending: true })
         .limit(5),
+      user ? supabase.from("saved_items").select("post_id").eq("user_id", user.id) : Promise.resolve({ data: [] }),
     ]);
 
   if (postsError) console.error("Erro ao carregar posts:", postsError.message);
@@ -77,6 +80,7 @@ export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEv
   );
   const likeCounts = new Map<string, number>();
   const commentCounts = new Map<string, number>();
+  const savedPostIds = new Set(((savedRows ?? []) as Array<{ post_id: string }>).map((row) => row.post_id));
 
   for (const like of (likes ?? []) as Array<{ post_id: string }>) {
     likeCounts.set(like.post_id, (likeCounts.get(like.post_id) ?? 0) + 1);
@@ -98,6 +102,7 @@ export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEv
         authorInitials: initials(authorName),
         likeCount: likeCounts.get(post.id) ?? 0,
         commentCount: commentCounts.get(post.id) ?? 0,
+        isSaved: savedPostIds.has(post.id),
       };
     }),
     events: ((eventRows ?? []) as Array<{

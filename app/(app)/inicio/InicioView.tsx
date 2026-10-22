@@ -1,12 +1,13 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useUser } from "../../components/UserProvider";
 import type { HomeEvent, HomePost } from "../../../lib/home";
 import { createClient } from "../../../lib/supabase/client";
-import { publishPost, type PublishState } from "./actions";
+import { publishPost, savePost, type PublishState } from "./actions";
+import { createComment, toggleLike } from "@/app/actions/posts";
 import styles from "../../styles/dashboard.module.css";
 
 function formatEvent(event: HomeEvent) {
@@ -65,7 +66,8 @@ export default function InicioView({ posts, events }: { posts: HomePost[]; event
 }
 
 function PostCard({ post }: { post: HomePost }) {
-  return <article className={`${styles.card} ${styles.post}`}><div className={styles.postTop}><div className={styles.postUser}><div className={styles.avatar} style={{ background: "#4e82b8" }}>{post.authorInitials}</div><div><div className={styles.postName}>{post.authorName}</div><div className={styles.postRole}>{formatRole(post.authorRole)} · {formatRelative(post.createdAt)}</div></div></div></div><p className={styles.postBody}>{post.body}</p><div className={styles.postFooter}><button className={styles.postAction} type="button">♡ {post.likeCount}</button><button className={styles.postAction} type="button">◌ {post.commentCount}</button><button className={`${styles.postAction} ${styles.save}`} type="button">▮ Salvar</button></div></article>;
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  return <article className={`${styles.card} ${styles.post}`}><div className={styles.postTop}><div className={styles.postUser}><div className={styles.avatar} style={{ background: "#4e82b8" }}>{post.authorInitials}</div><div><div className={styles.postName}>{post.authorName}</div><div className={styles.postRole}>{formatRole(post.authorRole)} · {formatRelative(post.createdAt)}</div></div></div></div><p className={styles.postBody}>{post.body}</p><div className={styles.postFooter}><form action={toggleLike}><input type="hidden" name="postId" value={post.id} /><input type="hidden" name="redirectPath" value="/inicio" /><button className={styles.postAction} type="submit">♡ {post.likeCount}</button></form><button className={styles.postAction} type="button" onClick={() => setCommentsOpen((open) => !open)}>◌ {post.commentCount}</button>{post.isSaved ? <span className={`${styles.postAction} ${styles.save}`}>▮ Salvo</span> : <form className={styles.save} action={savePost}><input type="hidden" name="postId" value={post.id} /><button className={styles.postAction} type="submit">▮ Salvar</button></form>}</div>{commentsOpen && <form style={{ display: "flex", gap: 8, marginTop: 12, borderTop: "1px solid #edf0f3", paddingTop: 12 }} action={createComment}><input type="hidden" name="postId" value={post.id} /><input type="hidden" name="redirectPath" value="/inicio" /><input style={{ flex: 1, border: "1px solid #dbe3ea", borderRadius: 7, padding: 8, fontSize: 11 }} name="body" maxLength={2000} placeholder="Escreva um comentário..." required /><button style={{ border: 0, borderRadius: 7, background: "#102541", color: "#fff", padding: "0 12px", fontSize: 10 }} type="submit">Enviar</button></form>}</article>;
 }
 
 function formatRelative(value: string) {

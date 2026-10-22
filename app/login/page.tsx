@@ -31,6 +31,7 @@ export default function LoginPage() {
             <label className={styles.label}>Senha
               <input className={styles.input} name="password" type="password" autoComplete="current-password" placeholder="••••••••" />
             </label>
+            <Link href="/recuperar-senha" style={{ color: "#3e6d9d", fontSize: 12, textAlign: "right", marginTop: -8 }}>Esqueci minha senha</Link>
             {state?.error && <div className={styles.error}>{state.error}</div>}
             <button className={styles.submit} disabled={pending}>{pending ? "Entrando…" : "Entrar na conta"}</button>
           </form>

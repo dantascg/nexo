@@ -26,3 +26,15 @@ export async function publishPost(_previous: PublishState, formData: FormData): 
   revalidatePath("/inicio");
   return { success: true };
 }
+
+export async function savePost(formData: FormData) {
+  const postId = String(formData.get("postId") ?? "");
+  if (!postId) return;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  const { error } = await supabase.from("saved_items").upsert({ user_id: user.id, post_id: postId, collection: "Geral" }, { onConflict: "user_id,post_id" });
+  if (error) console.error("Erro ao salvar post:", error.message);
+  revalidatePath("/inicio");
+  revalidatePath("/salvos");
+}

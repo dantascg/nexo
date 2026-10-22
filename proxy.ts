@@ -31,9 +31,10 @@ export async function proxy(request: NextRequest) {
   const isLoggedIn = !!data?.claims;
 
   const path = request.nextUrl.pathname;
-  const isAuthPage = path === "/login" || path === "/cadastro";
+  const isAuthPage = path === "/login" || path === "/cadastro" || path === "/recuperar-senha";
+  const isAuthCallback = path === "/auth/confirm";
 
-  if (!isLoggedIn && !isAuthPage) {
+  if (!isLoggedIn && !isAuthPage && !isAuthCallback) {
     return redirectKeepingCookies(request, "/login", response);
   }
   if (isLoggedIn && isAuthPage) {
