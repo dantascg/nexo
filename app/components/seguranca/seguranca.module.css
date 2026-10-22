@@ -1,0 +1,72 @@
+.root{--navy:#102541;--coral:#ef6f58;--blue:#4e82b8;--gold:#c89d3c;--green:#1a7f4b;--red:#b42318;--line:#e6ebf0;--muted:#748397;max-width:1120px;margin:0 auto;padding:34px 42px 60px;display:grid;gap:24px;color:var(--navy)}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;color:#73859b;font:600 10px Manrope,sans-serif;margin-bottom:7px}
+.title{font:700 27px Manrope,sans-serif;letter-spacing:-.8px}
+.subtitle{color:var(--muted);font-size:13px;margin-top:6px;max-width:620px;line-height:1.5}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+.cardHead{margin-bottom:16px}
+.cardTitle{font:700 16px Manrope,sans-serif}
+.cardSub{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}
+.twoCols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.btn{background:var(--navy);color:#fff;border-radius:9px;padding:11px 16px;font-weight:700;font-size:13px;cursor:pointer;border:0}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btnGhost{background:#fff;color:var(--navy);border:1px solid #dce2e8;border-radius:9px;padding:10px 14px;font-weight:600;font-size:12px;cursor:pointer}
+
+/* Como o Nexo protege */
+.protect{background:var(--navy);color:#fff;border-radius:16px;padding:28px;display:grid;gap:20px}
+.protect h2{font:800 20px Manrope,sans-serif}
+.protect p.lead{color:#a7b8cb;font-size:13px;margin-top:6px;line-height:1.5;max-width:560px}
+.protGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.protItem{background:#ffffff10;border:1px solid #ffffff14;border-radius:12px;padding:16px;display:grid;gap:8px;align-content:start}
+.protIcon{width:26px;height:26px;border-radius:50%;background:var(--coral);display:grid;place-items:center;font-size:13px;font-weight:800}
+.protItem strong{font:700 13px Manrope,sans-serif}
+.protItem span.txt{color:#c9d6e3;font-size:12px;line-height:1.55}
+
+/* Quiz */
+.msg{border:1px solid var(--line);border-radius:12px;background:#f9fafb;padding:16px;display:grid;gap:10px;margin-bottom:14px}
+.msgTop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.canal{font:700 10px Manrope,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:#e8eef5;color:#3e6d9d}
+.counter{color:var(--muted);font-size:11px;font-weight:600}
+.meta{font-size:12px;color:#384b61;line-height:1.5;word-break:break-word}
+.meta b{color:var(--navy)}
+.body{font-size:13px;line-height:1.6;white-space:pre-line;word-break:break-word;border-top:1px dashed #d8dfe7;padding-top:10px}
+.attach{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.answerBad{background:var(--coral);color:#fff;border-radius:9px;padding:12px;font-weight:700;font-size:13px;cursor:pointer;border:0}
+.answerOk{background:var(--blue);color:#fff;border-radius:9px;padding:12px;font-weight:700;font-size:13px;cursor:pointer;border:0}
+.feedback{border-radius:12px;padding:14px 16px;display:grid;gap:8px;font-size:12px;line-height:1.55}
+.fbOk{background:#effaf3;border:1px solid #b7e4c7}
+.fbBad{background:#fff1f0;border:1px solid #f5c2bd}
+.feedback strong{font:700 13px Manrope,sans-serif}
+.feedback ul{padding-left:18px;list-style:disc;display:grid;gap:4px}
+.progress{height:6px;background:#e5e9ee;border-radius:3px;overflow:hidden;margin-bottom:16px}
+.progressBar{height:100%;background:var(--coral);transition:width .25s}
+.result{text-align:center;display:grid;gap:10px;padding:10px 0}
+.score{font:800 44px Manrope,sans-serif;color:var(--coral)}
+
+/* Testador de senhas */
+.pwRow{display:flex;gap:8px}
+.input{flex:1;min-width:0;border:1px solid #dce2e8;background:#f9fafb;border-radius:9px;padding:12px 14px;outline:0;color:var(--navy);font-size:14px}
+.input:focus{border-color:var(--navy);background:#fff}
+.warn{background:#fff8e6;border:1px solid #f0dca6;color:#7a5b10;border-radius:9px;padding:9px 12px;font-size:11px;line-height:1.5;margin-bottom:12px}
+.meter{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:14px 0 6px}
+.meterSeg{height:6px;border-radius:3px;background:#e5e9ee;transition:background .2s}
+.level{font:700 14px Manrope,sans-serif}
+.time{color:var(--muted);font-size:12px;margin:4px 0 12px}
+.checks{display:grid;gap:6px;font-size:12px;margin-bottom:14px}
+.checkOn{color:var(--green)}
+.checkOff{color:var(--muted)}
+.breach{font-size:12px;line-height:1.5;margin-top:10px;padding:10px 12px;border-radius:9px}
+.hint{color:var(--muted);font-size:11px;line-height:1.5;margin-top:8px}
+
+/* Checklist */
+.clHead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.clList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.clItem{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:12px 14px;cursor:pointer;background:#fff;text-align:left;width:100%}
+.clItemDone{background:#f3faf6;border-color:#b7e4c7}
+.clBox{flex:none;width:20px;height:20px;border-radius:6px;border:2px solid #c5ceda;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;margin-top:1px}
+.clBoxDone{background:var(--green);border-color:var(--green)}
+.clItem strong{display:block;font-size:13px;font-weight:700}
+.clItem small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:2px}
+
+@media(max-width:960px){.root{padding:24px 18px 50px}.twoCols{grid-template-columns:1fr}.protGrid{grid-template-columns:1fr 1fr}.clList{grid-template-columns:1fr}}
+@media(max-width:560px){.protGrid{grid-template-columns:1fr}.answers{grid-template-columns:1fr}}
