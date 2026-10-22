@@ -1,13 +1,27 @@
+import { Suspense } from "react";
 import Sidebar from "../components/Sidebar";
+import { UserProvider } from "../components/UserProvider";
+import { getCurrentUser } from "@/lib/auth";
 import styles from "../styles/dashboard.module.css";
+
+export const instant = false;
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={styles.shell}>
-      <Sidebar />
-      <div className={styles.main}>
-        {children}
+    <Suspense fallback={<div className={styles.shell} />}>
+      <AuthedShell>{children}</AuthedShell>
+    </Suspense>
+  );
+}
+
+async function AuthedShell({ children }: { children: React.ReactNode }) {
+  const user = await getCurrentUser();
+  return (
+    <UserProvider user={user}>
+      <div className={styles.shell}>
+        <Sidebar />
+        <div className={styles.main}>{children}</div>
       </div>
-    </div>
+    </UserProvider>
   );
 }
