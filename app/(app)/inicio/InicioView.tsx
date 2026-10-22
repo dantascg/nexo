@@ -7,6 +7,7 @@ import { useUser } from "../../components/UserProvider";
 import type { HomeEvent, HomePost } from "../../../lib/home";
 import { createClient } from "../../../lib/supabase/client";
 import { publishPost, type PublishState } from "./actions";
+import { deletePost } from "../admin/actions";
 import styles from "../../styles/dashboard.module.css";
 
 function formatEvent(event: HomeEvent) {
@@ -38,7 +39,7 @@ export default function InicioView({ posts, events }: { posts: HomePost[]; event
       .channel("home-posts")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "posts" },
+        { event: "*", schema: "public", table: "posts" },
         () => router.refresh()
       )
       .subscribe();
@@ -58,14 +59,14 @@ export default function InicioView({ posts, events }: { posts: HomePost[]; event
         {state?.error && <div className={styles.error}>{state.error}</div>}
         {state?.success && <div className={styles.success}>Publicação enviada.</div>}
       </form>
-      {posts.length ? posts.map((post) => <PostCard key={post.id} post={post} />) : <div className={`${styles.card} ${styles.empty}`}>Ainda não há publicações. Seja a primeira pessoa a compartilhar algo.</div>}
+      {posts.length ? posts.map((post) => <PostCard key={post.id} post={post} canDelete={user.isAdmin || post.authorId === user.id} isAdmin={user.isAdmin} />) : <div className={`${styles.card} ${styles.empty}`}>Ainda não há publicações. Seja a primeira pessoa a compartilhar algo.</div>}
     </main>
     <aside className={styles.right}><div className={`${styles.card} ${styles.rightCard}`}><div className={styles.rightHeader}><span className={styles.rightTitle}>Próximos eventos</span><span className={styles.muted}>{events.length}</span></div>{events.length ? events.map((event) => { const date = formatEvent(event); return <div className={styles.event} key={event.id}><div className={styles.date}><strong>{date.day}</strong><small>{date.month}</small></div><div><div className={styles.eventTitle}>{event.title}</div><div className={styles.eventMeta}>{date.time} · {event.location}</div></div></div>; }) : <div className={styles.muted}>Nenhum evento próximo.</div>}</div></aside>
   </div>;
 }
 
-function PostCard({ post }: { post: HomePost }) {
-  return <article className={`${styles.card} ${styles.post}`}><div className={styles.postTop}><div className={styles.postUser}><div className={styles.avatar} style={{ background: "#4e82b8" }}>{post.authorInitials}</div><div><div className={styles.postName}>{post.authorName}</div><div className={styles.postRole}>{formatRole(post.authorRole)} · {formatRelative(post.createdAt)}</div></div></div></div><p className={styles.postBody}>{post.body}</p><div className={styles.postFooter}><button className={styles.postAction} type="button">♡ {post.likeCount}</button><button className={styles.postAction} type="button">◌ {post.commentCount}</button><button className={`${styles.postAction} ${styles.save}`} type="button">▮ Salvar</button></div></article>;
+function PostCard({ post, canDelete, isAdmin }: { post: HomePost; canDelete: boolean; isAdmin: boolean }) {
+  return <article className={`${styles.card} ${styles.post}`}><div className={styles.postTop}><div className={styles.postUser}><div className={styles.avatar} style={{ background: "#4e82b8" }}>{post.authorInitials}</div><div><div className={styles.postName}>{post.authorName}</div><div className={styles.postRole}>{formatRole(post.authorRole)} · {formatRelative(post.createdAt)}</div></div></div>{canDelete && <form action={deletePost}><input type="hidden" name="postId" value={post.id} /><button type="submit" style={{ background: "none", border: 0, color: "#b42318", fontSize: 11, fontWeight: 700, cursor: "pointer" }} onClick={(e) => { if (!window.confirm("Remover esta publicação?")) e.preventDefault(); }}>{isAdmin ? "Remover" : "Excluir"}</button></form>}</div><p className={styles.postBody}>{post.body}</p><div className={styles.postFooter}><button className={styles.postAction} type="button">♡ {post.likeCount}</button><button className={styles.postAction} type="button">◌ {post.commentCount}</button><button className={`${styles.postAction} ${styles.save}`} type="button">▮ Salvar</button></div></article>;
 }
 
 function formatRelative(value: string) {

@@ -4,6 +4,7 @@ export type HomePost = {
   id: string;
   body: string;
   createdAt: string;
+  authorId: string;
   authorName: string;
   authorRole: string;
   authorInitials: string;
@@ -91,6 +92,7 @@ export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEv
       const authorName = displayName(profile?.full_name);
       return {
         id: post.id,
+        authorId: post.author_id,
         body: post.body,
         createdAt: post.created_at,
         authorName,

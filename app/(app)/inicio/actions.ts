@@ -20,7 +20,8 @@ export async function publishPost(_previous: PublishState, formData: FormData): 
   const { error } = await supabase.from("posts").insert({ author_id: user.id, body });
   if (error) {
     console.error("Erro ao publicar post:", error.message);
-    return { error: "Não foi possível publicar agora." };
+    const friendly = error.message.startsWith("Nexo:") ? error.message.slice(5).trim() : null;
+    return { error: friendly ?? "Não foi possível publicar agora." };
   }
 
   revalidatePath("/inicio");
