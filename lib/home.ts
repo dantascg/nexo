@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { connection } from "next/server";
 
 export type HomePost = {
   id: string;
@@ -29,6 +30,8 @@ function displayName(value: unknown) {
 }
 
 export async function getHomeData(): Promise<{ posts: HomePost[]; events: HomeEvent[] }> {
+  // A data query based on the current time must opt out of prerendering.
+  await connection();
   const supabase = await createClient();
 
   const [{ data: postRows, error: postsError }, { data: eventRows, error: eventsError }] =
